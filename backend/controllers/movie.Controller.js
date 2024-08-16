@@ -1,8 +1,11 @@
 // controllers/movieController.js
-const axios = require('axios');
-const Movie = require('../models/Movie');
+import axios from 'axios';
+import {Movie} from "../models/Movie.model.js";
+import { asyncHandler } from '../utils/asyncHandler.js';
 
-exports.searchMovies = async (req, res) => {
+
+
+const searchMovies = asyncHandler(async (req, res) => {
     const { query } = req.query;
     if (!query) {
         return res.status(400).json({ message: 'Query parameter is required' });
@@ -18,9 +21,9 @@ exports.searchMovies = async (req, res) => {
         console.error('Error fetching movies from OMDB API:', err.message);
         res.status(500).json({ message: 'Internal Server Error' });
     }
-};
+});
 
-exports.addMovie = async (req, res) => {
+const addMovie = asyncHandler(async (req, res) => {
     const { imdbID, title, year, genre, poster } = req.body;
     try {
         let movie = await Movie.findOne({ imdbID });
@@ -33,4 +36,9 @@ exports.addMovie = async (req, res) => {
         console.error('Error adding movie:', err.message);
         res.status(500).json({ message: 'Internal Server Error' });
     }
-};
+})
+
+export{
+    searchMovies,
+    addMovie
+}

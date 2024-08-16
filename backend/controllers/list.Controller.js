@@ -1,12 +1,12 @@
 
+import axios from "axios";
+import mongoose from "mongoose";
+import {List} from "../models/List.model.js" 
+import {Movie} from  "../models/Movie.model.js"
+import { asyncHandler } from "../utils/asyncHandler.js"
 
-// controllers/listController.js
-const axios = require("axios");
-const mongoose = require("mongoose");
-const List = require("../models/List");
-const Movie = require("../models/Movie");
 
-exports.createList = async (req, res) => {
+const createList = asyncHandler(async (req, res) => {
   const { name, isPublic } = req.body;
   const userId = req.user.id;
   try {
@@ -16,9 +16,9 @@ exports.createList = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
+});
 
-exports.getLists = async (req, res) => {
+const getLists = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   try {
     const lists = await List.find({ user: userId }).populate("movies");
@@ -26,9 +26,9 @@ exports.getLists = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
+});
 
-exports.getDefaultList = async (req, res) => {
+const getDefaultList = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   try {
     const defaultList = await List.findOne({
@@ -42,9 +42,9 @@ exports.getDefaultList = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
+});
 
-exports.addMovieToList = async (req, res) => {
+const addMovieToList = asyncHandler(async (req, res) => {
     const { listId, movieId } = req.body; // movieId is the imdbID
 
     try {
@@ -77,7 +77,14 @@ exports.addMovieToList = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-};
+});
+
+export {
+  addMovieToList,
+  getDefaultList,
+  getLists,
+  createList
+}
 
 // exports.getMoviesForUser = async (req, res) => {
 //   try {

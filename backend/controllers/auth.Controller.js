@@ -1,9 +1,9 @@
-const User = require("../models/User");
-const List = require("../models/List");
-const jwt = require("jsonwebtoken");
+import {User} from "../models/User.model.js";
+import {List} from "../models/List.model.js";
+import jwt from "jsonwebtoken"
 
 
-exports.register = async (req, res) => {
+const register = async (req, res) => {
   const { username, email, password } = req.body;
   try {
     const user = new User({ username, email, password });
@@ -22,7 +22,7 @@ exports.register = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -37,3 +37,8 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export{
+  register,
+  login
+}
